@@ -38,6 +38,9 @@ Qt5 X11 Extras - development files.
 %package doc
 Summary:	The Qt5 X11 Extras - docs
 Group:		Documentation
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
 
 %description doc
 Qt5 X11 Extras - documentation.
