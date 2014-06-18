@@ -2,7 +2,10 @@
 # - cleanup
 
 %define		orgname		qtx11extras
-Summary:	The Qt5 X11 Extras
+%define		qtbase_ver	%{version}
+%define		qttools_ver	%{version}
+Summary:	The Qt5 X11 Extras library
+Summary(pl.UTF-8):	Biblioteka Qt5 X11 Extras
 Name:		qt5-%{orgname}
 Version:	5.2.0
 Release:	0.1
@@ -11,39 +14,92 @@ Group:		X11/Libraries
 Source0:	http://download.qt-project.org/official_releases/qt/5.2/%{version}/submodules/%{orgname}-opensource-src-%{version}.tar.xz
 # Source0-md5:	1a11c4bb67503e2a5ef10b96bbe11b61
 URL:		http://qt-project.org/
-BuildRequires:	qt5-qtbase-devel = %{version}
-BuildRequires:	qt5-qttools-devel = %{version}
+BuildRequires:	qt5-qtbase-devel = %{qtbase_ver}
+BuildRequires:	qt5-qttools-devel = %{qttools_ver}
+%if %{with qch}
+BuildRequires:	qt5-assistant >= %{qttools_ver}
+%endif
+BuildRequires:	qt5-build >= %{qtbase_ver}
+BuildRequires:	qt5-qmake >= %{qtbase_ver}
 BuildRequires:	rpmbuild(macros) >= 1.654
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_noautoreqdep	libGL.so.1 libGLU.so.1
-%define		_noautostrip	'.*_debug\\.so*'
-
 %define		specflags	-fno-strict-aliasing
-%define		_qtdir		%{_libdir}/qt5
+%define		qt5dir		%{_libdir}/qt5
 
 %description
-Qt5 X11 Extras libraries.
+Qt is a cross-platform application and UI framework. Using Qt, you can
+write web-enabled applications once and deploy them across desktop,
+mobile and embedded systems without rewriting the source code.
 
-%package devel
-Summary:	The Qt5 X11Extras - development files
+This package contains Qt5 X11 Extras library.
+
+%description -l pl.UTF-8
+Qt to wieloplatformowy szkielet aplikacji i interfejsów użytkownika.
+Przy użyciu Qt można pisać aplikacje powiązane z WWW i wdrażać je w
+systemach biurkowych, przenośnych i wbudowanych bez przepisywania kodu
+źródłowego.
+
+Ten pakiet zawiera bibliotekę Qt5 X11 Extras.
+
+%package -n Qt5X11Extras
+Summary:	The Qt5 X11 Extras library
+Summary(pl.UTF-8):	Biblioteka Qt5 X11 Extras
+Group:		Libraries
+Requires:	Qt5Core >= %{qtbase_ver}
+Obsoletes:	qt5-qtx11extas
+
+%description -n Qt5X11Extras
+Qt5 X11 Extras library provides (TODO: ...)
+
+%description -n Qt5X11Extras -l pl.UTF_8
+Biblioteka Qt5 X11 Extras (TODO: ...)
+
+%package -n Qt5X11Extras-devel
+Summary:	Qt5 X11 Extras - development files
+Summary(pl.UTF-8):	Biblioteka Qt5 X11 Extras - pliki programistyczne
 Group:		X11/Development/Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	Qt5Core-devel >= %{qtbase_ver}
+Requires:	Qt5X11Extras = %{version}-%{release}
+Obsoletes:	qt5-qtx11extas-devel
 
-%description devel
+%description -n Qt5X11Extras-devel
 Qt5 X11 Extras - development files.
 
+%description -n Qt5X11Extras-devel -l pl.UTF-8
+Biblioteka Qt5 X11 Extras - pliki programistyczne.
+
 %package doc
-Summary:	The Qt5 X11 Extras - docs
+Summary:	Qt5 X11 Extras documentation in HTML format
+Summary(pl.UTF-8):	Dokumentacja do biblioteki Qt5 X11 Extras w formacie HTML
 Group:		Documentation
+Requires:	qt5-doc-common >= %{qtbase_ver}
 %if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
 %endif
 
 %description doc
-Qt5 X11 Extras - documentation.
+Qt5 X11 Extras documentation in HTML format.
+
+%description doc -l pl.UTF-8
+Dokumentacja do biblioteki Qt5 X11 Extras w formacie HTML.
+
+%package doc-qch
+Summary:	Qt5 X11 Extras documentation in QCH format
+Summary(pl.UTF-8):	Dokumentacja do biblioteki Qt5 X11 Extras w formacie QCH
+Group:		Documentation
+Requires:	qt5-doc-common >= %{qtbase_ver}
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
+
+%description doc-qch
+Qt5 X11 Extras documentation in QCH format.
+
+%description doc-qch -l pl.UTF-8
+Dokumentacja do biblioteki Qt5 X11 Extras w formacie QCH.
 
 %prep
 %setup -q -n %{orgname}-opensource-src-%{version}
@@ -51,37 +107,47 @@ Qt5 X11 Extras - documentation.
 %build
 qmake-qt5
 %{__make}
-%{__make} docs
+%{__make} %{!?with_qch:html_}docs
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	INSTALL_ROOT=$RPM_BUILD_ROOT
 
-%{__make} install_docs \
+%{__make} install_%{!?with_qch:html_}docs \
 	INSTALL_ROOT=$RPM_BUILD_ROOT
+
+# useless symlinks
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libQt5*.so.5.?
+# actually drop *.la, follow policy of not packaging them when *.pc exist
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libQt5*.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post		-p /sbin/ldconfig
-%postun		-p /sbin/ldconfig
+%post	-n Qt5X11Extras -p /sbin/ldconfig
+%postun	-n Qt5X11Extras -p /sbin/ldconfig
 
-%files
+%files -n Qt5X11Extras
 %defattr(644,root,root,755)
-%attr(755,root,root) %ghost %{_libdir}/libQt5X11Extras.so.?
-%attr(755,root,root) %{_libdir}/libQt5X11Extras.so.*.*
+%attr(755,root,root) %{_libdir}/libQt5X11Extras.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libQt5X11Extras.so.5
 
-%files devel
+%files -n Qt5X11Extras-devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libQt5X11Extras.so
-%{_libdir}/libQt5X11Extras.la
 %{_libdir}/libQt5X11Extras.prl
-%{_libdir}/cmake/Qt5X11Extras
 %{_includedir}/qt5/QtX11Extras
-%{_pkgconfigdir}/*.pc
-%{_qtdir}/mkspecs
+%{_pkgconfigdir}/Qt5X11Extras.pc
+%{_libdir}/cmake/Qt5X11Extras
+%{qt5dir}/mkspecs/modules/*.pri
 
 %files doc
 %defattr(644,root,root,755)
-%{_docdir}/qt5-doc
+%{_docdir}/qt5-doc/qtx11extras
+
+%if %{with qch}
+%files doc-qch
+%defattr(644,root,root,755)
+%{_docdir}/qt5-doc/qtx11extras.qch
+%endif
