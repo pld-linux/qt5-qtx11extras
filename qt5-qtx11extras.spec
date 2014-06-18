@@ -1,5 +1,6 @@
-# TODO:
-# - cleanup
+#
+# Conditional build:
+%bcond_without	qch	# documentation in QCH format
 
 %define		orgname		qtx11extras
 %define		qtbase_ver	%{version}
@@ -7,15 +8,15 @@
 Summary:	The Qt5 X11 Extras library
 Summary(pl.UTF-8):	Biblioteka Qt5 X11 Extras
 Name:		qt5-%{orgname}
-Version:	5.2.0
-Release:	0.1
-License:	LGPL v2.1 or GPL v3.0
+Version:	5.3.0
+Release:	1
+License:	LGPL v2.1 with Digia Qt LGPL Exception v1.1 or GPL v3.0
 Group:		X11/Libraries
-Source0:	http://download.qt-project.org/official_releases/qt/5.2/%{version}/submodules/%{orgname}-opensource-src-%{version}.tar.xz
-# Source0-md5:	1a11c4bb67503e2a5ef10b96bbe11b61
+Source0:	http://download.qt-project.org/official_releases/qt/5.3/%{version}/submodules/%{orgname}-opensource-src-%{version}.tar.xz
+# Source0-md5:	83fc516c7f6ab82599b3f6e46744cb85
 URL:		http://qt-project.org/
-BuildRequires:	qt5-qtbase-devel = %{qtbase_ver}
-BuildRequires:	qt5-qttools-devel = %{qttools_ver}
+BuildRequires:	Qt5Core-devel >= %{qtbase_ver}
+BuildRequires:	Qt5Gui-devel >= %{qtbase_ver}
 %if %{with qch}
 BuildRequires:	qt5-assistant >= %{qttools_ver}
 %endif
@@ -49,19 +50,24 @@ Summary:	The Qt5 X11 Extras library
 Summary(pl.UTF-8):	Biblioteka Qt5 X11 Extras
 Group:		Libraries
 Requires:	Qt5Core >= %{qtbase_ver}
+Requires:	Qt5Gui >= %{qtbase_ver}
 Obsoletes:	qt5-qtx11extas
 
 %description -n Qt5X11Extras
-Qt5 X11 Extras library provides (TODO: ...)
+Qt5 X11 Extras library provides classes for developing for the X11
+platform.
 
 %description -n Qt5X11Extras -l pl.UTF_8
-Biblioteka Qt5 X11 Extras (TODO: ...)
+Biblioteka Qt5 X11 Extras dostarcza klasy do tworzenia oprogramowania
+dla platformy X11.
 
 %package -n Qt5X11Extras-devel
 Summary:	Qt5 X11 Extras - development files
 Summary(pl.UTF-8):	Biblioteka Qt5 X11 Extras - pliki programistyczne
 Group:		X11/Development/Libraries
+Requires:	OpenGL-devel
 Requires:	Qt5Core-devel >= %{qtbase_ver}
+Requires:	Qt5Gui-devel >= %{qtbase_ver}
 Requires:	Qt5X11Extras = %{version}-%{release}
 Obsoletes:	qt5-qtx11extas-devel
 
@@ -130,6 +136,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n Qt5X11Extras
 %defattr(644,root,root,755)
+%doc LGPL_EXCEPTION.txt dist/changes-*
 %attr(755,root,root) %{_libdir}/libQt5X11Extras.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libQt5X11Extras.so.5
 
@@ -140,7 +147,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/qt5/QtX11Extras
 %{_pkgconfigdir}/Qt5X11Extras.pc
 %{_libdir}/cmake/Qt5X11Extras
-%{qt5dir}/mkspecs/modules/*.pri
+%{qt5dir}/mkspecs/modules/qt_lib_x11extras.pri
+%{qt5dir}/mkspecs/modules/qt_lib_x11extras_private.pri
 
 %files doc
 %defattr(644,root,root,755)
