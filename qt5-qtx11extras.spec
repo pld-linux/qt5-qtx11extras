@@ -57,7 +57,7 @@ Obsoletes:	qt5-qtx11extas
 Qt5 X11 Extras library provides classes for developing for the X11
 platform.
 
-%description -n Qt5X11Extras -l pl.UTF_8
+%description -n Qt5X11Extras -l pl.UTF-8
 Biblioteka Qt5 X11 Extras dostarcza klasy do tworzenia oprogramowania
 dla platformy X11.
 
