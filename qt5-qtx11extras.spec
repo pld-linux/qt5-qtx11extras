@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_without	qch	# documentation in QCH format
+%bcond_without	doc	# Documentation
 
 %define		orgname		qtx11extras
 %define		qtbase_ver	%{version}
@@ -17,7 +17,7 @@ Source0:	http://download.qt.io/official_releases/qt/5.8/%{version}/submodules/%{
 URL:		http://www.qt.io/
 BuildRequires:	Qt5Core-devel >= %{qtbase_ver}
 BuildRequires:	Qt5Gui-devel >= %{qtbase_ver}
-%if %{with qch}
+%if %{with doc}
 BuildRequires:	qt5-assistant >= %{qttools_ver}
 %endif
 BuildRequires:	qt5-build >= %{qtbase_ver}
@@ -113,15 +113,17 @@ Dokumentacja do biblioteki Qt5 X11 Extras w formacie QCH.
 %build
 qmake-qt5
 %{__make}
-%{__make} %{!?with_qch:html_}docs
+%{?with_doc:%{__make} docs}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	INSTALL_ROOT=$RPM_BUILD_ROOT
 
-%{__make} install_%{!?with_qch:html_}docs \
+%if %{with doc}
+%{__make} install_docs \
 	INSTALL_ROOT=$RPM_BUILD_ROOT
+%endif
 
 # useless symlinks
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/libQt5*.so.5.?
@@ -150,11 +152,11 @@ rm -rf $RPM_BUILD_ROOT
 %{qt5dir}/mkspecs/modules/qt_lib_x11extras.pri
 %{qt5dir}/mkspecs/modules/qt_lib_x11extras_private.pri
 
+%if %{with doc}
 %files doc
 %defattr(644,root,root,755)
 %{_docdir}/qt5-doc/qtx11extras
 
-%if %{with qch}
 %files doc-qch
 %defattr(644,root,root,755)
 %{_docdir}/qt5-doc/qtx11extras.qch
