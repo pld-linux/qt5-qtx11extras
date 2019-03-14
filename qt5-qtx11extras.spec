@@ -8,12 +8,12 @@
 Summary:	The Qt5 X11 Extras library
 Summary(pl.UTF-8):	Biblioteka Qt5 X11 Extras
 Name:		qt5-%{orgname}
-Version:	5.12.1
+Version:	5.12.2
 Release:	1
 License:	LGPL v2.1 with Digia Qt LGPL Exception v1.1 or GPL v3.0
 Group:		X11/Libraries
 Source0:	http://download.qt.io/official_releases/qt/5.12/%{version}/submodules/%{orgname}-everywhere-src-%{version}.tar.xz
-# Source0-md5:	7525a59c08d233a2b53656a374982d53
+# Source0-md5:	08eb87bb411d96e62f91fab121df8e81
 URL:		http://www.qt.io/
 BuildRequires:	Qt5Core-devel >= %{qtbase_ver}
 BuildRequires:	Qt5Gui-devel >= %{qtbase_ver}
