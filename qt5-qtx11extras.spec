@@ -51,7 +51,7 @@ Summary(pl.UTF-8):	Biblioteka Qt5 X11 Extras
 Group:		Libraries
 Requires:	Qt5Core >= %{qtbase_ver}
 Requires:	Qt5Gui >= %{qtbase_ver}
-Obsoletes:	qt5-qtx11extas
+Obsoletes:	qt5-qtx11extras < 5.2.0-1
 
 %description -n Qt5X11Extras
 Qt5 X11 Extras library provides classes for developing for the X11
@@ -68,7 +68,7 @@ Group:		X11/Development/Libraries
 Requires:	Qt5Core-devel >= %{qtbase_ver}
 Requires:	Qt5Gui-devel >= %{qtbase_ver}
 Requires:	Qt5X11Extras = %{version}-%{release}
-Obsoletes:	qt5-qtx11extas-devel
+Obsoletes:	qt5-qtx11extras-devel < 5.2.0-1
 
 %description -n Qt5X11Extras-devel
 Qt5 X11 Extras - development files.
