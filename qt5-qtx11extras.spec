@@ -81,7 +81,7 @@ Summary:	Qt5 X11 Extras documentation in HTML format
 Summary(pl.UTF-8):	Dokumentacja do biblioteki Qt5 X11 Extras w formacie HTML
 Group:		Documentation
 Requires:	qt5-doc-common >= %{qtbase_ver}
-%{?noarchpackage}
+BuildArch:	noarch
 
 %description doc
 Qt5 X11 Extras documentation in HTML format.
@@ -94,7 +94,7 @@ Summary:	Qt5 X11 Extras documentation in QCH format
 Summary(pl.UTF-8):	Dokumentacja do biblioteki Qt5 X11 Extras w formacie QCH
 Group:		Documentation
 Requires:	qt5-doc-common >= %{qtbase_ver}
-%{?noarchpackage}
+BuildArch:	noarch
 
 %description doc-qch
 Qt5 X11 Extras documentation in QCH format.
