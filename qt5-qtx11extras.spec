@@ -50,7 +50,7 @@ Ten pakiet zawiera bibliotekę Qt5 X11 Extras.
 Summary:	The Qt5 X11 Extras library
 Summary(pl.UTF-8):	Biblioteka Qt5 X11 Extras
 Group:		Libraries
-Requires:	Qt5Core >= %{qtbase_ver}
+%requires_eq_to	Qt5Core Qt5Core-devel
 Requires:	Qt5Gui >= %{qtbase_ver}
 Obsoletes:	qt5-qtx11extras < 5.2.0-1
 
